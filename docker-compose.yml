@@ -1,0 +1,22 @@
+services:
+  warp:
+    image: dublok/cloudflare-warp:latest
+    container_name: warp-rotator
+    restart: unless-stopped
+    ports:
+      - "1080:1080"
+      - "8080:8080"
+    environment:
+      - WARP_INSTANCES=10
+      - PROXY_USER=ocuser
+      - PROXY_PASS=ocpass
+      - PROXY_ALLOWED_IPS=0.0.0.0/0
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - warp-data:/var/lib/cloudflare-warp
+
+volumes:
+  warp-data:
